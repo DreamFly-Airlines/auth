@@ -16,7 +16,7 @@ public class RegisterCommandHandler(
         if (user is not null)
         {
             var state = new EntityStateInfo(nameof(User), (nameof(User.Login), user.Login));
-            throw new ConflictException("User with such login already exists.", state);
+            throw new ConflictException("User with such login already exists", state);
         }
 
         var passwordHash = hasher.Hash(command.Password);

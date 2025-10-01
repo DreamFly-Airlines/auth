@@ -1,14 +1,19 @@
 using Authentication.Api.Requests;
+using Authentication.Api.Responses;
 using Authentication.Application.Commands;
+using Authentication.Application.Queries;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Abstractions.Commands;
+using Shared.Abstractions.Queries;
 
 namespace Authentication.Api.Controllers;
 
 [ApiController]
 [Route("/api/auth")]
-public class AuthController(ICommandSender commandSender) : Controller
+public class AuthController(
+    IQuerySender querySender,
+    ICommandSender commandSender) : Controller
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -19,8 +24,16 @@ public class AuthController(ICommandSender commandSender) : Controller
     }
 
     [HttpPost("login")]
-    public IActionResult LogIn([FromBody] LogInRequest request)
+    public async Task<IActionResult> LogIn([FromBody] LogInRequest request)
     {
-        throw new NotImplementedException();
+        var query = new LogInQuery(request.Login, request.Password);
+        var jwt = await querySender.SendAsync(query);
+        var response = new LogInResponse
+        {
+            AccessToken = jwt.AccessToken,
+            ExpiresIn = jwt.ExpiresIn.Seconds,
+            TokenType = "Bearer"
+        };
+        return Ok(response);
     }
 }

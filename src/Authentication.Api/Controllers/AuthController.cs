@@ -31,7 +31,7 @@ public class AuthController(
         var response = new LogInResponse
         {
             AccessToken = jwt.AccessToken,
-            ExpiresIn = jwt.ExpiresIn.Seconds,
+            ExpiresIn = ((DateTimeOffset)jwt.ExpiresIn).ToUnixTimeSeconds(),
             TokenType = "Bearer"
         };
         return Ok(response);

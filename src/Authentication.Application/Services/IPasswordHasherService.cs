@@ -1,6 +1,6 @@
 namespace Authentication.Application.Services;
 
-public interface IHasher
+public interface IPasswordHasherService
 {
     public string Hash(string @string);
 

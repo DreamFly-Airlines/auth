@@ -7,7 +7,7 @@ using Shared.Abstractions.Commands;
 namespace Authentication.Application.Commands;
 
 public class RegisterCommandHandler(
-    IHasher hasher,
+    IPasswordHasherService passwordHasherService,
     IUserRepository userRepository) : ICommandHandler<RegisterCommand>
 {
     public async Task HandleAsync(RegisterCommand command, CancellationToken cancellationToken = default)
@@ -19,7 +19,7 @@ public class RegisterCommandHandler(
             throw new ConflictException("User with such login already exists", state);
         }
 
-        var passwordHash = hasher.Hash(command.Password);
+        var passwordHash = passwordHasherService.Hash(command.Password);
         var id = Guid.NewGuid().ToString();
         var createdUser = new User(id, command.Login, passwordHash);
         await userRepository.AddAsync(createdUser, cancellationToken);

@@ -5,12 +5,12 @@ namespace Authentication.Domain.ValueObjects;
 public readonly record struct JwtToken
 {
     public string AccessToken { get; }
-    public TimeSpan ExpiresIn { get; }
+    public DateTime ExpiresIn { get; }
     
-    private JwtToken(string accessToken, TimeSpan expiresIn) 
+    private JwtToken(string accessToken, DateTime expiresIn) 
         => (AccessToken, ExpiresIn) = (accessToken, expiresIn);
 
-    public static JwtToken FromString(string accessToken, TimeSpan expiresIn)
+    public static JwtToken FromString(string accessToken, DateTime expiresIn)
     {
         var split = accessToken.Split('.');
         if (split.Length != 3)

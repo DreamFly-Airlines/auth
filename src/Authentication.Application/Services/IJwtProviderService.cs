@@ -3,7 +3,7 @@ using Authentication.Domain.ValueObjects;
 
 namespace Authentication.Application.Services;
 
-public interface IJwtProvider
+public interface IJwtProviderService
 {
     public JwtToken Generate(User user);
 }

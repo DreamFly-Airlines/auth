@@ -4,7 +4,7 @@ namespace Authentication.Domain.Repositories;
 
 public interface IUserRepository
 {
-    public Task<User?> GetByLoginAsync(string id, CancellationToken cancellationToken = default);
+    public Task<User?> GetByLoginAsync(string login, CancellationToken cancellationToken = default);
     
     public Task AddAsync(User user, CancellationToken cancellationToken = default);
     

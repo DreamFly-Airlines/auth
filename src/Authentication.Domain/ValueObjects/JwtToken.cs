@@ -4,11 +4,11 @@ namespace Authentication.Domain.ValueObjects;
 
 public readonly record struct JwtToken
 {
-    public string AccessToken { get; }
+    public string Token { get; }
     public DateTime ExpiresIn { get; }
     
     private JwtToken(string accessToken, DateTime expiresIn) 
-        => (AccessToken, ExpiresIn) = (accessToken, expiresIn);
+        => (Token, ExpiresIn) = (accessToken, expiresIn);
 
     public static JwtToken FromString(string accessToken, DateTime expiresIn)
     {

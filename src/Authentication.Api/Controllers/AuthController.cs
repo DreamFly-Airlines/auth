@@ -30,7 +30,7 @@ public class AuthController(
         var jwt = await querySender.SendAsync(query);
         var response = new LogInResponse
         {
-            AccessToken = jwt.AccessToken,
+            AccessToken = jwt.Token,
             ExpiresIn = ((DateTimeOffset)jwt.ExpiresIn).ToUnixTimeSeconds(),
             TokenType = "Bearer"
         };

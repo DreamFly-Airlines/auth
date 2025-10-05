@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Authentication.Application.Services;
 using Authentication.Domain.Entities;
@@ -9,7 +10,6 @@ namespace Authentication.Infrastructure.Services;
 
 public class MicrosoftIdentityModelJwtProviderService(JwtOptions jwtOptions) : IJwtProviderService
 {
-
     public JwtToken Generate(User user)
     {
         var signingCredentials = new SigningCredentials(
@@ -18,10 +18,11 @@ public class MicrosoftIdentityModelJwtProviderService(JwtOptions jwtOptions) : I
         var expiresIn = DateTime.UtcNow.AddSeconds(jwtOptions.ExpiresIn.TotalSeconds);
         var token = new JwtSecurityToken(
             signingCredentials: signingCredentials,
-            expires: expiresIn);
+            expires: expiresIn,
+            claims: [new(ClaimTypes.NameIdentifier, user.Id)]);
         var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
         if (accessToken is null)
-            throw new ArgumentNullException(nameof(accessToken));
+            throw new InvalidOperationException($"{nameof(accessToken)} is null");
         return JwtToken.FromString(accessToken, expiresIn);
     }
 }
